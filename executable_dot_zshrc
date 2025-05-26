@@ -1,27 +1,26 @@
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
-export XDG_CONFIG_HOME=/home/shared/.config
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=50000
 
 # 🔧 Добавляем путь к zsh-completions ПЕРЕД compinit
-fpath+=/home/shared/.config/zsh/zsh-completions
+fpath+=/home/curiosity/.config/zsh/zsh-completions
 
 # Включить автодополнение
 autoload -Uz compinit
 compinit
 
 # 🔌 Подключаем плагины (в правильном порядке)
-source /home/shared/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /home/shared/.config/zsh/zsh-completions/zsh-completions.plugin.zsh
-source /home/shared/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/curiosity/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /home/curiosity/.config/zsh/zsh-completions/zsh-completions.plugin.zsh
+source /home/curiosity/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Настройки автодополнения
 zstyle ':completion:*' menu select
 zmodload zsh/complist
-...
+
 # use the vi navigation keys in menu completion
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
@@ -35,13 +34,13 @@ umask 007
 
 setopt inc_append_history
 
-alias tmux="tmux -f /home/shared/.tmux.conf"
+alias tmux="tmux -f /home/curiosity/.tmux.conf"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/shared/google-cloud-sdk/path.zsh.inc' ]; then . '/home/shared/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/home/curiosity/google-cloud-sdk/path.zsh.inc' ]; then . '/home/curiosity/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/shared/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/shared/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/home/curiosity/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/curiosity/google-cloud-sdk/completion.zsh.inc'; fi

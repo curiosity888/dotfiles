@@ -21,13 +21,17 @@ window#waybar {
     background: rgba(0, 0, 8, 1);
     margin: 0px 0px;
     padding: 0 0px;
-    border-radius: 10px;
 }
 .modules-left {
     padding: 0;
+    border-radius: 0px 0px 10px 0px;
 }
 .modules-center {
     padding: 0 10px;
+    border-radius: 0px 0px 10px 10px;
+}
+.modules-right {
+    border-radius: 0px 0px 0px 10px;
 }
 
 #clock,
@@ -49,7 +53,7 @@ window#waybar {
 #language,
 #mpd {
     padding: 0 6px;
-    border-radius: 10px;
+    border-radius: 0px 0px 10px 10px;
 }
 
 #clock:hover,
@@ -83,7 +87,7 @@ window#waybar {
   font-size: 13pt;
   color: #c0caf5;
   border:none;
-  border-radius: 10px;
+  border-radius: 0px 0px 10px 10px;
 }
 
 #workspaces button.active {
