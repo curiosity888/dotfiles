@@ -1,6 +1,8 @@
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 
+source ~/.my_zsh > /dev/null 2>&1
+
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=50000

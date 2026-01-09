@@ -61,7 +61,8 @@
         "format-ethernet": "{ipaddr}/{cidr} ",
         "tooltip-format": "{essid}",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠" 
+        "format-disconnected": "Disconnected ⚠",
+        "on-click": "~/.config/rofi/scripts/rofi-wifi.sh"
     },
     "cpu": {
         "format": "  {usage}%",
@@ -71,12 +72,10 @@
         "format": "  {}%",
 	"tooltip": true
     },
-    "temperature": {
+    "custom/cpu_temp": {
         "interval": 10,
-        "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon6/temp1_input",
-        "critical-threshold": 100,
-        "format-critical": " {temperatureC}",
-        "format": " {temperatureC}°C"
+        "exec": "~/.config/waybar/scripts/cpu_temp.sh",
+        "return-type": "json"
     },
     "hyprland/language": {
        "format": "{}",
