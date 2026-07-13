@@ -5,8 +5,23 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    # Директории, где лежат проекты (добавляй свои через пробел)
-    selected=$(find ~/Projects ~/Godot -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+    # Директории с проектами — свои на каждой машине:
+    # ~/.config/tmux-sessionizer/dirs, по одной на строку, ~ разворачивается,
+    # пустые строки и #-комментарии игнорируются. Файла нет — дефолт ниже.
+    dirs_file="$HOME/.config/tmux-sessionizer/dirs"
+    project_dirs=()
+    if [[ -f $dirs_file ]]; then
+        # while-read вместо mapfile — на macOS bash 3.2 без mapfile
+        while IFS= read -r line; do
+            [[ -z $line || $line == \#* ]] && continue
+            project_dirs+=("${line/#\~/$HOME}")
+        done < "$dirs_file"
+    else
+        project_dirs=("$HOME/Projects" "$HOME/Godot")
+    fi
+
+    # несуществующие директории find молча пропустит (2>/dev/null)
+    selected=$(find "${project_dirs[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 fi
 
 # Нажали Esc в fzf — просто выходим
