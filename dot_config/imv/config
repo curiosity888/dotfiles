@@ -1,4 +1,0 @@
-[binds]
-<Left> = prev
-<Right> = next
-<q> = close

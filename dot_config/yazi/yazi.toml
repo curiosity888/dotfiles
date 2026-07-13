@@ -1,9 +1,0 @@
-# yazi.toml
-[mgr]
-show_hidden = true
-
-[opener]
-image = [
-  { run = 'imv *.png', block = true, orphan = true },
-]
-
