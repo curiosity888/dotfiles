@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# cheat: шпаргалки из ~/cheats через fzf
+#   cheat     — список файлов с glow-превью
+#   cheat -g  — live-grep по содержимому (как <leader>ps в nvim)
+# В обоих режимах Ctrl+G переключает файлы <-> grep.
+
+CHEAT_DIR="$HOME/cheats"
+
+# --- режим grep: набранный текст = запрос к rg, список обновляется на лету ---
+grep_mode() {
+    cd "$CHEAT_DIR" || exit 1
+    local rg_cmd="rg --line-number --no-heading --color=always --smart-case"
+    local out
+    out=$(fzf \
+        --reverse --ansi --disabled \
+        --prompt 'grep> ' \
+        --header 'Ctrl+G — к списку файлов' \
+        --bind "start:reload:$rg_cmd ''" \
+        --bind "change:reload:$rg_cmd {q} || true" \
+        --bind 'ctrl-g:become(cheat)' \
+        --delimiter : \
+        --preview 'bat --color=always --style=plain --highlight-line {2} {1}' \
+        --preview-window 'right,55%,+{2}/2')
+
+    [[ -z $out ]] && exit 0
+    local file line
+    file=${out%%:*}
+    line=$(cut -d: -f2 <<< "$out")
+
+    # открываем на найденной строке: bat подсвечивает, less прыгает к ней
+    bat --paging=always --style=plain --color=always \
+        --highlight-line "$line" \
+        --pager "less -R +${line}g" \
+        "$file"
+    exit 0
+}
+
+[[ $1 == "-g" ]] && grep_mode
+
+# --- режим по умолчанию: выбор файла ---
+selected=$(find "$CHEAT_DIR" -name '*.md' | sort | fzf \
+    --reverse \
+    --prompt 'cheat> ' \
+    --header 'Ctrl+G — grep по содержимому' \
+    --bind 'ctrl-g:become(cheat -g)' \
+    --delimiter / --with-nth -1 \
+    --preview 'glow -s dark -w $FZF_PREVIEW_COLUMNS {}' \
+    --preview-window 'right,70%')
+
+# Esc — выходим молча
+[[ -z $selected ]] && exit 0
+
+# -p: пейджер с прокруткой
+glow -p "$selected"
