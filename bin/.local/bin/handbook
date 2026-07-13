@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# cheat: шпаргалки из ~/cheats через fzf
-#   cheat     — список файлов с glow-превью
-#   cheat -g  — live-grep по содержимому (как <leader>ps в nvim)
+# handbook: справочник из ~/handbook через fzf
+#   handbook     — список файлов с glow-превью
+#   handbook -g  — live-grep по содержимому (как <leader>ps в nvim)
 # В обоих режимах Ctrl+G переключает файлы <-> grep.
 
-CHEAT_DIR="$HOME/cheats"
+HANDBOOK_DIR="$HOME/handbook"
 
 # --- режим grep: набранный текст = запрос к rg, список обновляется на лету ---
 grep_mode() {
-    cd "$CHEAT_DIR" || exit 1
+    cd "$HANDBOOK_DIR" || exit 1
     local rg_cmd="rg --line-number --no-heading --color=always --smart-case"
     local out
     out=$(fzf \
@@ -17,7 +17,7 @@ grep_mode() {
         --header 'Ctrl+G — к списку файлов' \
         --bind "start:reload:$rg_cmd ''" \
         --bind "change:reload:$rg_cmd {q} || true" \
-        --bind 'ctrl-g:become(cheat)' \
+        --bind 'ctrl-g:become(handbook)' \
         --delimiter : \
         --preview 'bat --color=always --style=plain --highlight-line {2} {1}' \
         --preview-window 'right,55%,+{2}/2')
@@ -38,11 +38,11 @@ grep_mode() {
 [[ $1 == "-g" ]] && grep_mode
 
 # --- режим по умолчанию: выбор файла ---
-selected=$(find "$CHEAT_DIR" -name '*.md' | sort | fzf \
+selected=$(find "$HANDBOOK_DIR" -name '*.md' | sort | fzf \
     --reverse \
-    --prompt 'cheat> ' \
+    --prompt 'handbook> ' \
     --header 'Ctrl+G — grep по содержимому' \
-    --bind 'ctrl-g:become(cheat -g)' \
+    --bind 'ctrl-g:become(handbook -g)' \
     --delimiter / --with-nth -1 \
     --preview 'glow -s dark -w $FZF_PREVIEW_COLUMNS {}' \
     --preview-window 'right,70%')
