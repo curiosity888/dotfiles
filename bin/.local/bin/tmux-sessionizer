@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# tmux-sessionizer: быстрое переключение между проектами через fzf + tmux
+
+# Если путь передан аргументом — используем его, иначе выбираем через fzf
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    # Директории, где лежат проекты (добавляй свои через пробел)
+    selected=$(find ~/Projects ~/Godot -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+fi
+
+# Нажали Esc в fzf — просто выходим
+[[ -z $selected ]] && exit 0
+
+# Имя сессии = имя папки; точки заменяем, tmux их не принимает в именах
+session_name=$(basename "$selected" | tr . _)
+
+# Создаём сессию, если её ещё нет (-d — не подключаясь, -c — рабочая директория)
+if ! tmux has-session -t="$session_name" 2>/dev/null; then
+    tmux new-session -ds "$session_name" -c "$selected"
+fi
+
+# Внутри tmux — переключаем клиента, снаружи — подключаемся
+if [[ -n $TMUX ]]; then
+    tmux switch-client -t "$session_name"
+else
+    tmux attach-session -t "$session_name"
+fi
