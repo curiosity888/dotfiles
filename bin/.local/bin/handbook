@@ -38,7 +38,7 @@ grep_mode() {
 [[ $1 == "-g" ]] && grep_mode
 
 # --- режим по умолчанию: выбор файла ---
-selected=$(find "$HANDBOOK_DIR" -name '*.md' | sort | fzf \
+selected=$(find -L "$HANDBOOK_DIR" -name '*.md' | sort | fzf \
     --reverse \
     --prompt 'handbook> ' \
     --header 'Ctrl+G — grep по содержимому' \
