@@ -1,0 +1,17 @@
+# Сессии по номерам — образец. Скопировать в ~/.config/tmux/sessions.conf
+# (файл не под git: список проектов свой на каждой машине) и править под себя.
+# Новый проект — дописать строку по образцу; имя сессии = имя папки, как у
+# tmux-sessionizer.
+#
+# Логика строки: сессия есть — просто переключаемся; нет — создаём её в фоне
+# (-d, без переключения клиента), потом switch-client. Всё через if-shell, а не
+# run-shell: if-shell синхронный, поэтому switch-client гарантированно
+# выполняется после создания сессии.
+#
+# @tmux с полным путём обязателен: PATH сервера tmux — /usr/bin:/bin:/usr/sbin:
+# /sbin, homebrew в нём нет, поэтому голое `tmux` внутри if-shell не найдётся.
+# На Linux/Intel-маке путь свой — ещё одна причина держать файл вне репо.
+set -g @tmux "/opt/homebrew/bin/tmux"
+
+bind -n C-M-1 if-shell "#{@tmux} has-session -t=dotfiles 2>/dev/null || #{@tmux} new-session -ds dotfiles -c ~/dotfiles" "switch-client -t dotfiles"
+bind -n C-M-2 if-shell "#{@tmux} has-session -t=handbook 2>/dev/null || #{@tmux} new-session -ds handbook -c ~/dotfiles/handbook" "switch-client -t handbook"
